@@ -35,7 +35,13 @@ public class AddressBook {
       }
 
     }
-
+public void deleteContactDetails(){
+        if(editIndex!=null){
+            System.out.println(editIndex);
+            contactList.remove(contactList.get(editIndex));
+            editIndex=null;
+        }
+}
     private boolean isContactListed(Contact contact) {
         for (Contact x : contactList) {
             if (x.equals(contact)) {

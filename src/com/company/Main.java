@@ -12,6 +12,25 @@ public class Main {
         main.addContactToAddressBook();
         main.printAddressBook();
         main.editUserDetails();
+        main.printAddressBook();
+        main.deleteUserDetails();
+        main.printAddressBook();
+    }
+
+    private void deleteUserDetails() {
+        System.out.println("Please Enter First And Last Name to Edit Contact");
+        String firstName = scanner.next();
+        String lastName = scanner.next();
+        boolean flag = isContactEditable(firstName, lastName);
+        if (!flag) {
+            System.out.println("Contact Doesn't Exists With the given First Name and Last Name");
+            return;
+        }
+        deleteUserDetailsFromContactDetails();
+    }
+
+    private void deleteUserDetailsFromContactDetails() {
+      addressBook.deleteContactDetails();
     }
 
     private void editUserDetails() {
