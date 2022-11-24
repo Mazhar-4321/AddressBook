@@ -4,17 +4,16 @@ import java.util.Scanner;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
+    private final int ADD_CONTACT = 1;
+    private final int EDIT_CONTACT = 2;
+    private final int DELETE_CONTACT = 3;
+    private final int PRINT_ADDRESS_BOOK = 4;
     private AddressBook addressBook = new AddressBook();
 
     public static void main(String[] args) {
         System.out.println("Welcome to Address Book Program");
         Main main = new Main();
-        main.addContactToAddressBook();
-        main.printAddressBook();
-        main.editUserDetails();
-        main.printAddressBook();
-        main.deleteUserDetails();
-        main.printAddressBook();
+        main.giveUserChoicesToOperate(main);
     }
 
     private void deleteUserDetails() {
@@ -54,12 +53,14 @@ public class Main {
     private void addContactToAddressBook() {
         addressBook.addContact(takeInputFromUserAndCreateContact());
     }
-    private boolean takeInputAndValidateContact(){
+
+    private boolean takeInputAndValidateContact() {
         String firstName = scanner.next();
         String lastName = scanner.next();
         return isContactEditable(firstName, lastName);
     }
-    private Contact takeInputFromUserAndCreateContact(){
+
+    private Contact takeInputFromUserAndCreateContact() {
         System.out.println("Please Enter first Name");
         String firstName = scanner.next();
         System.out.println("Please Enter last Name");
@@ -75,5 +76,29 @@ public class Main {
         System.out.println("Please Enter Email");
         String email = scanner.next();
         return new Contact(firstName, lastName, city, state, zipCode, phoneNumber, email);
+    }
+
+    private void giveUserChoicesToOperate(Main main) {
+        while (true) {
+            System.out.println("Press 1 to Add Contact , Press 2 to Edit Contact, Press 3 to Delete Contact, Press 4 to Print Address Book and any key to exit");
+            int option = scanner.nextInt();
+            switch (option) {
+                case ADD_CONTACT:
+                    main.addContactToAddressBook();
+                    break;
+                case EDIT_CONTACT:
+                    main.editUserDetails();
+                    break;
+                case DELETE_CONTACT:
+                    main.deleteUserDetails();
+                    break;
+                case PRINT_ADDRESS_BOOK:
+                    printAddressBook();
+                    break;
+                default:
+                    return;
+
+            }
+        }
     }
 }

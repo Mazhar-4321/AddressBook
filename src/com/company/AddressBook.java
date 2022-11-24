@@ -40,7 +40,6 @@ public class AddressBook {
 
     public void deleteContactDetails() {
         if (editIndex != null) {
-            System.out.println(editIndex);
             contactList.remove(contactList.get(editIndex));
             editIndex = null;
         }
