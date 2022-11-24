@@ -18,7 +18,7 @@ public class Main {
     }
 
     private void deleteUserDetails() {
-        System.out.println("Please Enter First And Last Name to Edit Contact");
+        System.out.println("Please Enter First And Last Name to Delete Contact");
         String firstName = scanner.next();
         String lastName = scanner.next();
         boolean flag = isContactEditable(firstName, lastName);
