@@ -1,5 +1,7 @@
 package com.company;
 
+import java.util.Objects;
+
 public class Contact {
     private String firstName;
     private String lastName;
@@ -9,7 +11,7 @@ public class Contact {
     private String phoneNumber;
     private String email;
 
-    public Contact(String firstName, String lastName, String city, String state, String zip, String phoneNumber, String email) {
+    public Contact(String firstName, String lastName, String city, String state, String zip, String phoneNumber,String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.city = city;
@@ -45,5 +47,18 @@ public class Contact {
 
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(firstName, contact.firstName) && Objects.equals(lastName, contact.lastName) && Objects.equals(city, contact.city) && Objects.equals(state, contact.state) && Objects.equals(zip, contact.zip) && Objects.equals(phoneNumber, contact.phoneNumber) && Objects.equals(email, contact.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, city, state, zip, phoneNumber, email);
     }
 }
