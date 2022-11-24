@@ -13,35 +13,39 @@ public class AddressBook {
     }
 
     public void addContact(Contact contact) {
-     if(isContactListed(contact)){
-         System.out.println("Contact Already Exists");
-         return;
-     }
+        if (isContactListed(contact)) {
+            System.out.println("Contact Already Exists");
+            return;
+        }
         contactList.add(contact);
     }
-    public boolean checkIfContactExistsUsingName(String firstName,String lastName){
-        for(int i=0;i<contactList.size();i++){
-            if(contactList.get(i).getFirstName().equals(firstName)&&contactList.get(i).getLastName().equals(lastName)) {
-                editIndex=i;
+
+    public boolean checkIfContactExistsUsingName(String firstName, String lastName) {
+        for (int i = 0; i < contactList.size(); i++) {
+            if (contactList.get(i).getFirstName().equals(firstName) && contactList.get(i).getLastName().equals(lastName)) {
+                editIndex = i;
                 return true;
             }
         }
         return false;
     }
+
     public void editContactDetails(Contact contact) {
-      if(editIndex!=null){
-          contactList.set(editIndex,contact);
-          editIndex=null;
-      }
+        if (editIndex != null) {
+            contactList.set(editIndex, contact);
+            editIndex = null;
+        }
 
     }
-public void deleteContactDetails(){
-        if(editIndex!=null){
+
+    public void deleteContactDetails() {
+        if (editIndex != null) {
             System.out.println(editIndex);
             contactList.remove(contactList.get(editIndex));
-            editIndex=null;
+            editIndex = null;
         }
-}
+    }
+
     private boolean isContactListed(Contact contact) {
         for (Contact x : contactList) {
             if (x.equals(contact)) {

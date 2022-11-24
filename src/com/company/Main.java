@@ -30,7 +30,7 @@ public class Main {
     }
 
     private void deleteUserDetailsFromContactDetails() {
-      addressBook.deleteContactDetails();
+        addressBook.deleteContactDetails();
     }
 
     private void editUserDetails() {
