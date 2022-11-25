@@ -8,6 +8,7 @@ public class Main {
     private final int EDIT_CONTACT = 2;
     private final int DELETE_CONTACT = 3;
     private final int PRINT_ADDRESS_BOOK = 4;
+    private final int ADD_MULTIPLE_CONTACTS = 5;
     private AddressBook addressBook = new AddressBook();
 
     public static void main(String[] args) {
@@ -87,7 +88,8 @@ public class Main {
     // Choice selection
     private void giveUserChoicesToOperate(Main main) {
         while (true) {
-            System.out.println("Press 1 to Add Contact , Press 2 to Edit Contact, Press 3 to Delete Contact, Press 4 to Print Address Book and any key to exit");
+            System.out.println("Press 1 to Add Contact , Press 2 to Edit Contact, Press 3 to Delete Contact," +
+                    " Press 4 to Print Address Book , Press 5 to Add Multiple Contacts At a Time and Press any number to exit");
             int option = scanner.nextInt();
             switch (option) {
                 case ADD_CONTACT:
@@ -102,9 +104,21 @@ public class Main {
                 case PRINT_ADDRESS_BOOK:
                     printAddressBook();
                     break;
+                case ADD_MULTIPLE_CONTACTS:
+                    main.addMultipleContactsToAddressBook();
+                    break;
                 default:
                     return;
             }
+        }
+    }
+
+    private void addMultipleContactsToAddressBook() {
+        System.out.println("Enter a Number");
+        int number = scanner.nextInt();
+        for (int i=1;i<=number;i++) {
+            System.out.printf("Enter Contact Details of Person %d",i);
+            addContactToAddressBook();
         }
     }
 }
