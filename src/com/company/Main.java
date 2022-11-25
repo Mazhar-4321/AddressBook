@@ -141,8 +141,6 @@ public class Main {
             i++;
             addressBookDirectory.addAddressBook(key, addMultipleContactsToAddressBook(1));
         }
-
-
     }
 
     private AddressBook addMultipleContactsToAddressBook(int offset) {
