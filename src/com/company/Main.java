@@ -16,19 +16,12 @@ public class Main {
         main.giveUserChoicesToOperate(main);
     }
 
-    private void deleteUserDetails() {
-        System.out.println("Please Enter First And Last Name to Delete Contact");
-        if (!takeInputAndValidateContact()) {
-            System.out.println("Contact Doesn't Exists With the given First Name and Last Name");
-            return;
-        }
-        deleteUserDetailsFromContactDetails();
+    //Add Contact to Address Book
+    private void addContactToAddressBook() {
+        addressBook.addContact(takeInputFromUserAndCreateContact());
     }
 
-    private void deleteUserDetailsFromContactDetails() {
-        addressBook.deleteContactDetails();
-    }
-
+    // Edit Contact
     private void editUserDetails() {
         System.out.println("Please Enter First And Last Name to Edit Contact");
         if (!takeInputAndValidateContact()) {
@@ -42,18 +35,31 @@ public class Main {
         addressBook.editContactDetails(takeInputFromUserAndCreateContact());
     }
 
-    private boolean isContactEditable(String firstName, String lastName) {
-        return addressBook.checkIfContactExistsUsingName(firstName, lastName);
+    // Delete Contact
+    private void deleteUserDetails() {
+        System.out.println("Please Enter First And Last Name to Delete Contact");
+        if (!takeInputAndValidateContact()) {
+            System.out.println("Contact Doesn't Exists With the given First Name and Last Name");
+            return;
+        }
+        deleteUserDetailsFromContactDetails();
     }
 
+    private void deleteUserDetailsFromContactDetails() {
+        addressBook.deleteContactDetails();
+    }
+
+    //  Print Address Book
     private void printAddressBook() {
         System.out.println(addressBook);
     }
 
-    private void addContactToAddressBook() {
-        addressBook.addContact(takeInputFromUserAndCreateContact());
+    // Validate Contact
+    private boolean isContactEditable(String firstName, String lastName) {
+        return addressBook.checkIfContactExistsUsingName(firstName, lastName);
     }
 
+    // Input Contact
     private boolean takeInputAndValidateContact() {
         String firstName = scanner.next();
         String lastName = scanner.next();
@@ -78,6 +84,7 @@ public class Main {
         return new Contact(firstName, lastName, city, state, zipCode, phoneNumber, email);
     }
 
+    // Choice selection
     private void giveUserChoicesToOperate(Main main) {
         while (true) {
             System.out.println("Press 1 to Add Contact , Press 2 to Edit Contact, Press 3 to Delete Contact, Press 4 to Print Address Book and any key to exit");

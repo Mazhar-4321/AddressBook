@@ -2,7 +2,6 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AddressBook {
     private List<Contact> contactList;
@@ -35,7 +34,6 @@ public class AddressBook {
             contactList.set(editIndex, contact);
             editIndex = null;
         }
-
     }
 
     public void deleteContactDetails() {
