@@ -22,35 +22,47 @@ public class Main {
 
     //Add Contact to Address Book
     private void addContactToAddressBook(AddressBook addressBook) {
-        addressBook.addContact(takeInputFromUserAndCreateContact());
+        addressBook.addContact(takeInputFromUserAndCreateContact(null));
     }
 
     // Edit Contact
     private void editUserDetails() {
         System.out.println("Please Enter First And Last Name to Edit Contact");
-        if (!takeInputAndValidateContact()) {
+        Contact contact = takeInputAndValidateContact();
+        if (contact == null) {
             System.out.println("Contact Doesn't Exists With the given First Name and Last Name");
             return;
         }
-        updateUserDetailsToContactList();
+        updateUserDetailsToContactList(contact);
     }
 
+    @Deprecated
     private void updateUserDetailsToContactList() {
-        addressBook.editContactDetails(takeInputFromUserAndCreateContact());
+        addressBook.editContactDetails(takeInputFromUserAndCreateContact(null));
+    }
+
+    private void updateUserDetailsToContactList(Contact contact) {
+        addressBook.editContactDetails(takeInputFromUserAndCreateContact(contact));
     }
 
     // Delete Contact
     private void deleteUserDetails() {
         System.out.println("Please Enter First And Last Name to Delete Contact");
-        if (!takeInputAndValidateContact()) {
+        Contact contact = takeInputAndValidateContact();
+        if (contact == null) {
             System.out.println("Contact Doesn't Exists With the given First Name and Last Name");
             return;
         }
-        deleteUserDetailsFromContactDetails();
+        deleteUserDetailsFromContactDetails(contact);
     }
 
+    @Deprecated
     private void deleteUserDetailsFromContactDetails() {
         addressBook.deleteContactDetails();
+    }
+
+    private void deleteUserDetailsFromContactDetails(Contact contact) {
+        addressBook.deleteContactDetails(contact);
     }
 
     //  Print Address Book
@@ -59,18 +71,18 @@ public class Main {
     }
 
     // Validate Contact
-    private boolean isContactEditable(String firstName, String lastName) {
-        return addressBook.checkIfContactExistsUsingName(firstName, lastName);
+    private Contact isContactEditable(String firstName, String lastName) {
+        return addressBook.checkIfContactExistsUsingNameAndReturnContact(firstName, lastName);
     }
 
     // Input Contact
-    private boolean takeInputAndValidateContact() {
+    private Contact takeInputAndValidateContact() {
         String firstName = scanner.next();
         String lastName = scanner.next();
         return isContactEditable(firstName, lastName);
     }
 
-    private Contact takeInputFromUserAndCreateContact() {
+    private Contact takeInputFromUserAndCreateContact(Contact contact) {
         System.out.println("Please Enter first Name");
         String firstName = scanner.next();
         System.out.println("Please Enter last Name");
@@ -85,7 +97,16 @@ public class Main {
         String phoneNumber = scanner.next();
         System.out.println("Please Enter Email");
         String email = scanner.next();
-        return new Contact(firstName, lastName, city, state, zipCode, phoneNumber, email);
+        if (contact == null)
+            return new Contact(firstName, lastName, city, state, zipCode, phoneNumber, email);
+        contact.setFirstName(firstName);
+        contact.setLastName(lastName);
+        contact.setCity(city);
+        contact.setState(state);
+        contact.setZip(zipCode);
+        contact.setPhoneNumber(phoneNumber);
+        contact.setEmail(email);
+        return contact;
     }
 
     // Choice selection

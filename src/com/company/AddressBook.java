@@ -19,14 +19,23 @@ public class AddressBook {
         contactList.add(contact);
     }
 
+    @Deprecated
     public boolean checkIfContactExistsUsingName(String firstName, String lastName) {
-        for (int i = 0; i < contactList.size(); i++) {
-            if (contactList.get(i).getFirstName().equals(firstName) && contactList.get(i).getLastName().equals(lastName)) {
-                editIndex = i;
+        for (Contact contact : contactList) {
+            if (contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public Contact checkIfContactExistsUsingNameAndReturnContact(String firstName, String lastName) {
+        for (Contact contact : contactList) {
+            if (contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName)) {
+                return contact;
+            }
+        }
+        return null;
     }
 
     public void editContactDetails(Contact contact) {
@@ -36,11 +45,16 @@ public class AddressBook {
         }
     }
 
+    @Deprecated
     public void deleteContactDetails() {
         if (editIndex != null) {
             contactList.remove(contactList.get(editIndex));
             editIndex = null;
         }
+    }
+
+    public void deleteContactDetails(Contact contact) {
+        contactList.remove(contact);
     }
 
     private boolean isContactListed(Contact contact) {
