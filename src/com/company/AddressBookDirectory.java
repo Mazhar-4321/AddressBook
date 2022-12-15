@@ -6,12 +6,16 @@ import java.util.stream.Stream;
 
 public class AddressBookDirectory {
     private static Map<String, AddressBook> addressBookMap;
+    private static Map<String, List<Contact>> cityPersonsMap;
+    private static Map<String, List<Contact>> statePersonsMap;
 
     AddressBookDirectory() {
         addressBookMap = new HashMap<>();
+        cityPersonsMap = new HashMap<>();
+        statePersonsMap = new HashMap<>();
     }
 
-    public static void findByCity(String cityName) {
+    public static List<Contact> findByCity(String cityName) {
         List<Contact> contactList = new ArrayList<>();
         addressBookMap.entrySet().forEach(key -> {
             List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getCity().equals(cityName)).collect(Collectors.toList());
@@ -19,10 +23,10 @@ public class AddressBookDirectory {
                 contactList.addAll(list);
             }
         });
-        System.out.println(contactList);
+        return contactList;
     }
 
-    public static void findByState(String stateName) {
+    public static List<Contact> findByState(String stateName) {
         List<Contact> contactList = new ArrayList<>();
         addressBookMap.entrySet().forEach(key -> {
             List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getState().equals(stateName)).collect(Collectors.toList());
@@ -30,7 +34,26 @@ public class AddressBookDirectory {
                 contactList.addAll(list);
             }
         });
-        System.out.println(contactList);
+        return contactList;
+    }
+
+
+
+
+    public void addCityWiseContacts() {
+        Set<String> cities = new HashSet<>();
+        addressBookMap.entrySet().forEach(k -> {
+            k.getValue().getContactList().forEach(y -> cities.add(y.getCity()));
+        });
+        cities.stream().forEach(k -> cityPersonsMap.put(k, findByCity(k)));
+    }
+
+    public void addStateWiseContacts() {
+        Set<String> states = new HashSet<>();
+        addressBookMap.entrySet().forEach(k -> {
+            k.getValue().getContactList().forEach(y -> states.add(y.getState()));
+        });
+        states.stream().forEach(k -> statePersonsMap.put(k, findByState(k)));
     }
 
     public Map<String, AddressBook> getAddressBookMap() {
