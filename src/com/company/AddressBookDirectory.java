@@ -90,7 +90,12 @@ public class AddressBookDirectory {
         });
         return contactList.size() == 0 ? null : contactList.get(0);
     }
-
+    public Long getNoOfPersonsInACity(String cityName) {
+        return cityPersonsMap.entrySet().stream().filter(k -> k.getKey().equals(cityName)).count();
+    }
+    public Long getNoOfPersonsInAState(String stateName) {
+        return statePersonsMap.entrySet().stream().filter(k -> k.getKey().equals(stateName)).count();
+    }
     @Override
     public String toString() {
         return "AddressBookDirectory{" +
