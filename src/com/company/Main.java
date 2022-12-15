@@ -1,6 +1,10 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -27,6 +31,10 @@ public class Main {
 
     // Edit Contact
     private void editUserDetails() {
+        if (addressBookDirectory.getAddressBookMap().size() == 0) {
+            System.out.println("Invalid Option As There Are No Address Books , First Create Address book and Try this option");
+            return;
+        }
         System.out.println("Please Enter First And Last Name to Edit Contact");
         Contact contact = takeInputAndValidateContact();
         if (contact == null) {
@@ -42,11 +50,54 @@ public class Main {
     }
 
     private void updateUserDetailsToContactList(Contact contact) {
-        addressBook.editContactDetails(takeInputFromUserAndCreateContact(contact));
+        System.out.println("Select The Option to Edit: 1 for Editing First Name , 2 for Last Name, 3 For City,4 for State , 5 for zip," +
+                "6 for Phone Number , 7 for email,8 for Exit ");
+        int option = scanner.nextInt();
+        while (true) {
+            switch (option) {
+                case 1:
+                    System.out.println("Enter First Name");
+                    contact.setFirstName(scanner.next());
+                    break;
+                case 2:
+                    System.out.println("Enter Last Name");
+                    contact.setLastName(scanner.next());
+                    break;
+                case 3:
+                    System.out.println("Enter City Name");
+                    contact.setCity(scanner.next());
+                    break;
+                case 4:
+                    System.out.println("Enter State Name");
+                    contact.setState(scanner.next());
+                    break;
+                case 5:
+                    System.out.println("Enter Zip Code");
+                    contact.setZip(scanner.next());
+                    break;
+                case 6:
+                    System.out.println("Enter Phone Number");
+                    contact.setPhoneNumber(scanner.next());
+                    break;
+                case 7:
+                    System.out.println("Enter Email");
+                    contact.setEmail(scanner.next());
+                    break;
+                case 8:
+                    return;
+
+            }
+            System.out.println("Re enter One Of The Options or Press 8 to exit");
+            option = scanner.nextInt();
+        }
     }
 
     // Delete Contact
     private void deleteUserDetails() {
+        if (addressBookDirectory.getAddressBookMap().size() == 0) {
+            System.out.println("Invalid Option As There Are No Address Books , First Create Address book and Try this option");
+            return;
+        }
         System.out.println("Please Enter First And Last Name to Delete Contact");
         Contact contact = takeInputAndValidateContact();
         if (contact == null) {
@@ -62,17 +113,30 @@ public class Main {
     }
 
     private void deleteUserDetailsFromContactDetails(Contact contact) {
-        addressBook.deleteContactDetails(contact);
+        addressBookDirectory.getAddressBookOfContact(contact).deleteContact(contact);
     }
 
     //  Print Address Book
     private void printAddressBook() {
-        System.out.println(addressBook);
+        List<String> addressBookNames = new ArrayList<>();
+        addressBookDirectory.getAddressBookMap().entrySet().forEach(key -> addressBookNames.add(key.getKey()));
+        if (addressBookNames.size() == 0) {
+            System.out.println("No Address Book Found, First Create One and try this option");
+            return;
+        }
+        System.out.println("Please Select One Of The Address book Names From Below To Proceed");
+        System.out.println(addressBookNames);
+        String addressBookName = scanner.next();
+        if (addressBookNames.contains(addressBookName)) {
+            System.out.println(addressBookDirectory.getAddressBookMap().get(addressBookName));
+            return;
+        }
+        System.out.println("Invalid Name");
     }
 
     // Validate Contact
     private Contact isContactEditable(String firstName, String lastName) {
-        return addressBook.checkIfContactExistsUsingNameAndReturnContact(firstName, lastName);
+        return addressBookDirectory.checkIfNameExistsInTheDirectory(firstName, lastName);
     }
 
     // Input Contact
@@ -82,11 +146,22 @@ public class Main {
         return isContactEditable(firstName, lastName);
     }
 
+    private Contact checkIfContactWithNameExists(String firstName, String lastName) {
+        return addressBookDirectory.checkIfNameExistsInTheDirectory(firstName, lastName);
+    }
+
     private Contact takeInputFromUserAndCreateContact(Contact contact) {
         System.out.println("Please Enter first Name");
         String firstName = scanner.next();
         System.out.println("Please Enter last Name");
         String lastName = scanner.next();
+        while (checkIfContactWithNameExists(firstName, lastName) != null) {
+            System.out.println("One Of The Contacts With First Name and Last Name Already Exists");
+            System.out.println("Please Enter first Name");
+            firstName = scanner.next();
+            System.out.println("Please Enter last Name");
+            lastName = scanner.next();
+        }
         System.out.println("Please Enter city");
         String city = scanner.next();
         System.out.println("Please Enter State");
@@ -113,11 +188,11 @@ public class Main {
     private void giveUserChoicesToOperate(Main main) {
         while (true) {
             System.out.println("Press 1 to Add Contact , Press 2 to Edit Contact, Press 3 to Delete Contact," +
-                    " Press 4 to Print Address Book , Press 5 to Add Multiple Contacts At a Time , Press 6 to Add Multiple Address Book ,Press 7 to Print Address Book Directory  and Press any number to exit");
+                    " Press 4 to Print Address Book , \n Press 6 to Add Multiple Address Book ,Press 7 to Print Address Book Directory  and Press any number to exit");
             int option = scanner.nextInt();
             switch (option) {
                 case ADD_CONTACT:
-                    main.addContactToAddressBook(this.addressBook);
+                    main.addContactToAddressBook();
                     break;
                 case EDIT_CONTACT:
                     main.editUserDetails();
@@ -127,9 +202,6 @@ public class Main {
                     break;
                 case PRINT_ADDRESS_BOOK:
                     printAddressBook();
-                    break;
-                case ADD_MULTIPLE_CONTACTS:
-                    main.addMultipleContactsToAddressBook(0);
                     break;
                 case ADD_ADDRESS_BOOK:
                     main.addAddressBook();
@@ -141,6 +213,24 @@ public class Main {
                     return;
             }
         }
+    }
+
+    private void addContactToAddressBook() {
+        List<String> addressBookNames = new ArrayList<>();
+        addressBookDirectory.getAddressBookMap().entrySet().forEach(key -> addressBookNames.add(key.getKey()));
+        if (addressBookNames.size() == 0) {
+            System.out.println("No Address Book Found, First Create One and try this option");
+            return;
+        }
+        System.out.println("Please Select One Of The Address book Names From Below To Proceed");
+        System.out.println(addressBookNames);
+        String addressBookName = scanner.next();
+        while (!addressBookNames.contains(addressBookName)) {
+            System.out.println("Invalid Name");
+            System.out.println("Type Address Book Name Again");
+            addressBookName = scanner.next();
+        }
+        addContactToAddressBook(addressBookDirectory.getAddressBookMap().get(addressBookName));
     }
 
     private void printAddressBookDirectory() {

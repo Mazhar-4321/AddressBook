@@ -2,6 +2,7 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AddressBook {
     private List<Contact> contactList;
@@ -9,6 +10,10 @@ public class AddressBook {
 
     AddressBook() {
         contactList = new ArrayList<>();
+    }
+
+    public List<Contact> getContactList() {
+        return contactList;
     }
 
     public void addContact(Contact contact) {
@@ -30,14 +35,11 @@ public class AddressBook {
     }
 
     public Contact checkIfContactExistsUsingNameAndReturnContact(String firstName, String lastName) {
-        for (Contact contact : contactList) {
-            if (contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName)) {
-                return contact;
-            }
-        }
-        return null;
+        Optional<Contact> optional = contactList.stream().filter(x -> x.getFirstName().equals(firstName) && x.getLastName().equals(lastName)).findFirst();
+        return optional.isPresent() ? optional.get() : null;
     }
 
+    @Deprecated
     public void editContactDetails(Contact contact) {
         if (editIndex != null) {
             contactList.set(editIndex, contact);
@@ -58,13 +60,11 @@ public class AddressBook {
     }
 
     private boolean isContactListed(Contact contact) {
-        for (Contact x : contactList) {
-            if (x.equals(contact)) {
-                System.out.println("Contact Already Exists");
-                return true;
-            }
-        }
-        return false;
+        return contactList.stream().filter(x -> x.equals(contact)).count() != 0;
+    }
+
+    public void deleteContact(Contact contact) {
+        contactList.remove(contact);
     }
 
     @Override
