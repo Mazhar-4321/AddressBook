@@ -15,7 +15,7 @@ public class AddressBookDirectory {
         statePersonsMap = new HashMap<>();
     }
 
-    public static List<Contact> findByCity(String cityName) {
+    public List<Contact> findByCity(String cityName) {
         List<Contact> contactList = new ArrayList<>();
         addressBookMap.entrySet().forEach(key -> {
             List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getCity().equals(cityName)).collect(Collectors.toList());
@@ -25,20 +25,6 @@ public class AddressBookDirectory {
         });
         return contactList;
     }
-
-    public static List<Contact> findByState(String stateName) {
-        List<Contact> contactList = new ArrayList<>();
-        addressBookMap.entrySet().forEach(key -> {
-            List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getState().equals(stateName)).collect(Collectors.toList());
-            if (list != null) {
-                contactList.addAll(list);
-            }
-        });
-        return contactList;
-    }
-
-
-
 
     public void addCityWiseContacts() {
         Set<String> cities = new HashSet<>();
@@ -51,9 +37,45 @@ public class AddressBookDirectory {
     public void addStateWiseContacts() {
         Set<String> states = new HashSet<>();
         addressBookMap.entrySet().forEach(k -> {
-            k.getValue().getContactList().forEach(y -> states.add(y.getState()));
+            k.getValue().getContactList().forEach(y -> {
+                states.add(y.getState());
+                System.out.println(y.getState() + "   ");
+            });
         });
         states.stream().forEach(k -> statePersonsMap.put(k, findByState(k)));
+    }
+
+    public void printStatePersonsMap() {
+        System.out.println("State to Persons List");
+        statePersonsMap.entrySet().forEach(k -> {
+            System.out.println(k.getKey() + ":");
+            k.getValue().forEach(y -> {
+                System.out.println(y.getFirstName() + " " + y.getLastName());
+            });
+            System.out.println();
+        });
+    }
+
+    public void printCityPersonsMap() {
+        System.out.println("City to Persons List");
+        cityPersonsMap.entrySet().forEach(k -> {
+            System.out.println(k.getKey() + ":");
+            k.getValue().forEach(y -> {
+                System.out.println(y.getFirstName() + " " + y.getLastName());
+            });
+            System.out.println();
+        });
+    }
+
+    public List<Contact> findByState(String stateName) {
+        List<Contact> contactList = new ArrayList<>();
+        addressBookMap.entrySet().forEach(key -> {
+            List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getState().equals(stateName)).collect(Collectors.toList());
+            if (list != null) {
+                contactList.addAll(list);
+            }
+        });
+        return contactList;
     }
 
     public Map<String, AddressBook> getAddressBookMap() {
@@ -90,12 +112,15 @@ public class AddressBookDirectory {
         });
         return contactList.size() == 0 ? null : contactList.get(0);
     }
+
     public Long getNoOfPersonsInACity(String cityName) {
         return cityPersonsMap.entrySet().stream().filter(k -> k.getKey().equals(cityName)).count();
     }
+
     public Long getNoOfPersonsInAState(String stateName) {
         return statePersonsMap.entrySet().stream().filter(k -> k.getKey().equals(stateName)).count();
     }
+
     @Override
     public String toString() {
         return "AddressBookDirectory{" +
