@@ -11,6 +11,28 @@ public class AddressBookDirectory {
         addressBookMap = new HashMap<>();
     }
 
+    public static void findByCity(String cityName) {
+        List<Contact> contactList = new ArrayList<>();
+        addressBookMap.entrySet().forEach(key -> {
+            List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getCity().equals(cityName)).collect(Collectors.toList());
+            if (list != null) {
+                contactList.addAll(list);
+            }
+        });
+        System.out.println(contactList);
+    }
+
+    public static void findByState(String stateName) {
+        List<Contact> contactList = new ArrayList<>();
+        addressBookMap.entrySet().forEach(key -> {
+            List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getState().equals(stateName)).collect(Collectors.toList());
+            if (list != null) {
+                contactList.addAll(list);
+            }
+        });
+        System.out.println(contactList);
+    }
+
     public Map<String, AddressBook> getAddressBookMap() {
         return addressBookMap;
     }
