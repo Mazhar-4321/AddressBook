@@ -8,7 +8,7 @@ public class AddressBook {
     private List<Contact> contactList;
     private Integer editIndex;
 
-    AddressBook() {
+    public AddressBook() {
         contactList = new ArrayList<>();
     }
 
@@ -16,12 +16,18 @@ public class AddressBook {
         return contactList;
     }
 
-    public void addContact(Contact contact) {
+    public boolean addContact(Contact contact) {
+        if(contact==null){
+            System.out.println("Unable to Add");
+            return false;
+        }
         if (isContactListed(contact)) {
             System.out.println("Contact Already Exists");
-            return;
+            return false;
         }
         contactList.add(contact);
+        return true;
+
     }
 
     @Deprecated
@@ -63,8 +69,8 @@ public class AddressBook {
         return contactList.stream().filter(x -> x.equals(contact)).count() != 0;
     }
 
-    public void deleteContact(Contact contact) {
-        contactList.remove(contact);
+    public boolean deleteContact(Contact contact) {
+       return contactList.remove(contact);
     }
 
     @Override

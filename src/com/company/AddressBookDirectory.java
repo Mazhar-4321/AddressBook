@@ -9,7 +9,7 @@ public class AddressBookDirectory {
     private static Map<String, List<Contact>> cityPersonsMap;
     private static Map<String, List<Contact>> statePersonsMap;
 
-    AddressBookDirectory() {
+    public AddressBookDirectory() {
         addressBookMap = new HashMap<>();
         cityPersonsMap = new HashMap<>();
         statePersonsMap = new HashMap<>();
@@ -98,6 +98,7 @@ public class AddressBookDirectory {
                 addressBookList.add(key.getValue());
             }
         });
+
         return addressBookList.get(0);
     }
 

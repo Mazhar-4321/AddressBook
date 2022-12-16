@@ -15,8 +15,8 @@ public class Main {
     private final int ADD_MULTIPLE_CONTACTS = 5;
     private final int ADD_ADDRESS_BOOK = 6;
     private final int PRINT_ADDRESS_BOOK_DIRECTORY = 7;
-    private AddressBook addressBook = new AddressBook();
-    private AddressBookDirectory addressBookDirectory = new AddressBookDirectory();
+    public AddressBook addressBook = new AddressBook();
+    public AddressBookDirectory addressBookDirectory = new AddressBookDirectory();
 
     public static void main(String[] args) {
         System.out.println("Welcome to Address Book Program");
@@ -25,8 +25,11 @@ public class Main {
     }
 
     //Add Contact to Address Book
-    private void addContactToAddressBook(AddressBook addressBook) {
-        addressBook.addContact(takeInputFromUserAndCreateContact(null));
+    private boolean addContactToAddressBook(AddressBook addressBook) {
+       return addressBook.addContact(takeInputFromUserAndCreateContact(null));
+    }
+    public boolean addContactToAddressBook(AddressBook addressBook , Contact contact){
+        return addressBook.addContact(contact);
     }
 
     // Edit Contact
@@ -52,7 +55,13 @@ public class Main {
     private void updateUserDetailsToContactList(Contact contact) {
         System.out.println("Select The Option to Edit: 1 for Editing First Name , 2 for Last Name, 3 For City,4 for State , 5 for zip," +
                 "6 for Phone Number , 7 for email,8 for Exit ");
-        int option = scanner.nextInt();
+        Integer option = 0;
+        while (true) {
+            if((option=ReadInput.getInt())!=null){
+                break;
+            }
+            System.out.println("Invalid Entry , Enter Valid Number");
+        }
         while (true) {
             switch (option) {
                 case 1:
@@ -88,7 +97,12 @@ public class Main {
 
             }
             System.out.println("Re enter One Of The Options or Press 8 to exit");
-            option = scanner.nextInt();
+            while (true) {
+                if((option=ReadInput.getInt())!=null){
+                    break;
+                }
+                System.out.println("Invalid Entry , Enter Valid Number");
+            }
         }
     }
 
@@ -115,6 +129,9 @@ public class Main {
     private void deleteUserDetailsFromContactDetails(Contact contact) {
         addressBookDirectory.getAddressBookOfContact(contact).deleteContact(contact);
     }
+    public boolean deleteUserDetailsFromContactDetailsWithReturnValue(Contact contact) {
+       return addressBookDirectory.getAddressBookOfContact(contact).deleteContact(contact);
+    }
 
     //  Print Address Book
     private void printAddressBook() {
@@ -135,7 +152,7 @@ public class Main {
     }
 
     // Validate Contact
-    private Contact isContactEditable(String firstName, String lastName) {
+    public Contact isContactEditable(String firstName, String lastName) {
         return addressBookDirectory.checkIfNameExistsInTheDirectory(firstName, lastName);
     }
 
@@ -143,7 +160,10 @@ public class Main {
     private Contact takeInputAndValidateContact() {
         String firstName = scanner.next();
         String lastName = scanner.next();
-        return isContactEditable(firstName, lastName);
+        return validateContact(firstName, lastName);
+    }
+    public Contact validateContact(String firstName,String lastName){
+       return isContactEditable(firstName, lastName);
     }
 
     private Contact checkIfContactWithNameExists(String firstName, String lastName) {
@@ -189,7 +209,13 @@ public class Main {
         while (true) {
             System.out.println("Press 1 to Add Contact , Press 2 to Edit Contact, Press 3 to Delete Contact," +
                     " Press 4 to Print Address Book , \n Press 6 to Add Multiple Address Book ,Press 7 to Print Address Book Directory  and Press any number to exit");
-            int option = scanner.nextInt();
+            Integer option = 0;
+            while (true) {
+                if((option=ReadInput.getInt())!=null){
+                    break;
+                }
+                System.out.println("Invalid Entry , Enter Valid Number");
+            }
             switch (option) {
                 case ADD_CONTACT:
                     main.addContactToAddressBook();
@@ -238,8 +264,14 @@ public class Main {
     }
 
     private void addAddressBook() {
-        System.out.println("Enter a Number to add Adress Books");
-        int number = scanner.nextInt();
+        System.out.println("How Many Address Books You Want to Add");
+        Integer number = 0;
+        while (true) {
+            if((number=ReadInput.getInt())!=null){
+                break;
+            }
+            System.out.println("Invalid Entry , Enter Valid Number");
+        }
         int i = 1;
         while (i <= number) {
             System.out.printf("Enter Address Book %d information\n", i);
@@ -256,7 +288,13 @@ public class Main {
 
     private AddressBook addMultipleContactsToAddressBook(int offset) {
         System.out.println("Enter Number of Contacts You Want to add to Address Book");
-        int number = scanner.nextInt();
+        Integer number = 0;
+        while (true) {
+            if((number=ReadInput.getInt())!=null){
+                break;
+            }
+            System.out.println("Invalid Entry , Enter Valid Number");
+        }
         AddressBook addressBook = new AddressBook();
         for (int i = 1; i <= number; i++) {
             System.out.printf("Enter Contact Details of Person %d\n", i);
