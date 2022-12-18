@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class JSONTestData {
     private static AddressBookDirectory addressBookDirectory;
-
     private JSONTestData() {
     }
 

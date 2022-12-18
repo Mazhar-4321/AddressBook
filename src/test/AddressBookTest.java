@@ -210,11 +210,5 @@ public class AddressBookTest {
         Assert.assertEquals(true, addressBookDirectory.checkIfNameExistsInTheDirectory("Mazhar", "Ali") != null);
     }
 
-    @Test
-    public void when_UnAvailableContactDeleted_MustReturnFalse() {
-        Assert.assertEquals(false, addressBookDirectory.deleteContactFromAddressBook(new Contact("a", "a", "a", "a", "a", "a", "a")));
-        Assert.assertEquals(true, addressBookDirectory.deleteContactFromAddressBook(new Contact("Mazhar", "Ali", "a", "a", "a", "a", "a")));
-    }
-
 
 }
