@@ -98,6 +98,19 @@ public class AddressBookDirectory {
         return statePersonsMap.get(stateName).size();
     }
 
+    public void sortAddressBookByPersonsName(String addressBookName) {
+        AddressBook addressBook = addressBookMap.get(addressBookName);
+        if (addressBook == null) {
+            System.out.println("Invalid Name");
+            return;
+        }
+        List<Contact> collect = addressBook.getContactList()
+                .stream()
+                .sorted((contact1, contact2) -> (contact1.getFirstName() + " " + contact1.getLastName().toLowerCase()).compareTo(contact2.getFirstName() + " " + contact2.getLastName()))
+                .collect(Collectors.toList());
+        collect.forEach(System.out::println);
+    }
+
     @Override
     public String toString() {
         return "AddressBookDirectory{" +
