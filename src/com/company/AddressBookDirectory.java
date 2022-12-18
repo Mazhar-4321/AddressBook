@@ -98,7 +98,7 @@ public class AddressBookDirectory {
         return statePersonsMap.get(stateName).size();
     }
 
-    public void sortAddressBookByPersonsName(String addressBookName) {
+    public void sortAddressBook(String addressBookName, String option) {
         AddressBook addressBook = addressBookMap.get(addressBookName);
         if (addressBook == null) {
             System.out.println("Invalid Name");
@@ -106,45 +106,24 @@ public class AddressBookDirectory {
         }
         List<Contact> collect = addressBook.getContactList()
                 .stream()
-                .sorted((contact1, contact2) -> (contact1.getFirstName() + " " + contact1.getLastName().toLowerCase()).compareTo(contact2.getFirstName() + " " + contact2.getLastName()))
+                .sorted(getComparator(option))
                 .collect(Collectors.toList());
         collect.forEach(System.out::println);
     }
-    public void sortAddressBookByCity(String addressBookName){
-        AddressBook addressBook = addressBookMap.get(addressBookName);
-        if (addressBook == null) {
-            System.out.println("Invalid Name");
-            return;
-        }
-        List<Contact> collect = addressBook.getContactList()
-                .stream()
-                .sorted(Comparator.comparing(contact -> (contact.getCity().toLowerCase())))
-                .collect(Collectors.toList());
-        collect.forEach(System.out::println);
-    }
-    public void sortAddressBookByState(String addressBookName){
-        AddressBook addressBook = addressBookMap.get(addressBookName);
-        if (addressBook == null) {
-            System.out.println("Invalid Name");
-            return;
-        }
-        List<Contact> collect = addressBook.getContactList()
-                .stream()
-                .sorted(Comparator.comparing(contact -> (contact.getState().toLowerCase())))
-                .collect(Collectors.toList());
-        collect.forEach(System.out::println);
-    }
-    public void sortAddressBookByZip(String addressBookName){
-        AddressBook addressBook = addressBookMap.get(addressBookName);
-        if (addressBook == null) {
-            System.out.println("Invalid Name");
-            return;
-        }
-        List<Contact> collect = addressBook.getContactList()
-                .stream()
-                .sorted(Comparator.comparing(contact -> (contact.getZip().toLowerCase())))
-                .collect(Collectors.toList());
-        collect.forEach(System.out::println);
+
+    private  Comparator<Contact> getComparator(String option) {
+        return (contact1, contact2) -> {
+            if (option.equals("name")) {
+                return (contact1.getFirstName() + " " + contact1.getLastName().toLowerCase()).compareTo(contact2.getFirstName() + " " + contact2.getLastName());
+            }
+            if (option.equals("state")) {
+                return (contact1.getState().toLowerCase()).compareTo(contact2.getState().toLowerCase());
+            }
+            if (option.equals("city")) {
+                return (contact1.getCity().toLowerCase()).compareTo(contact2.getCity().toLowerCase());
+            }
+            return (contact1.getZip().toLowerCase()).compareTo(contact2.getZip().toLowerCase());
+        };
     }
 
     @Override

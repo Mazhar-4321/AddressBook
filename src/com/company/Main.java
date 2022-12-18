@@ -26,9 +26,10 @@ public class Main {
 
     //Add Contact to Address Book
     private boolean addContactToAddressBook(AddressBook addressBook) {
-       return addressBook.addContact(takeInputFromUserAndCreateContact(null));
+        return addressBook.addContact(takeInputFromUserAndCreateContact(null));
     }
-    public boolean addContactToAddressBook(AddressBook addressBook , Contact contact){
+
+    public boolean addContactToAddressBook(AddressBook addressBook, Contact contact) {
         return addressBook.addContact(contact);
     }
 
@@ -47,17 +48,12 @@ public class Main {
         updateUserDetailsToContactList(contact);
     }
 
-    @Deprecated
-    private void updateUserDetailsToContactList() {
-        addressBook.editContactDetails(takeInputFromUserAndCreateContact(null));
-    }
-
     private void updateUserDetailsToContactList(Contact contact) {
         System.out.println("Select The Option to Edit: 1 for Editing First Name , 2 for Last Name, 3 For City,4 for State , 5 for zip," +
                 "6 for Phone Number , 7 for email,8 for Exit ");
         Integer option = 0;
         while (true) {
-            if((option=ReadInput.getInt())!=null){
+            if ((option = ReadInput.getInt()) != null) {
                 break;
             }
             System.out.println("Invalid Entry , Enter Valid Number");
@@ -98,7 +94,7 @@ public class Main {
             }
             System.out.println("Re enter One Of The Options or Press 8 to exit");
             while (true) {
-                if((option=ReadInput.getInt())!=null){
+                if ((option = ReadInput.getInt()) != null) {
                     break;
                 }
                 System.out.println("Invalid Entry , Enter Valid Number");
@@ -121,16 +117,12 @@ public class Main {
         deleteUserDetailsFromContactDetails(contact);
     }
 
-    @Deprecated
-    private void deleteUserDetailsFromContactDetails() {
-        addressBook.deleteContactDetails();
-    }
-
     private void deleteUserDetailsFromContactDetails(Contact contact) {
         addressBookDirectory.getAddressBookOfContact(contact).deleteContact(contact);
     }
+
     public boolean deleteUserDetailsFromContactDetailsWithReturnValue(Contact contact) {
-       return addressBookDirectory.getAddressBookOfContact(contact).deleteContact(contact);
+        return addressBookDirectory.getAddressBookOfContact(contact).deleteContact(contact);
     }
 
     //  Print Address Book
@@ -162,8 +154,9 @@ public class Main {
         String lastName = scanner.next();
         return validateContact(firstName, lastName);
     }
-    public Contact validateContact(String firstName,String lastName){
-       return isContactEditable(firstName, lastName);
+
+    public Contact validateContact(String firstName, String lastName) {
+        return isContactEditable(firstName, lastName);
     }
 
     private Contact checkIfContactWithNameExists(String firstName, String lastName) {
@@ -211,7 +204,7 @@ public class Main {
                     " Press 4 to Print Address Book , \n Press 6 to Add Multiple Address Book ,Press 7 to Print Address Book Directory  and Press any number to exit");
             Integer option = 0;
             while (true) {
-                if((option=ReadInput.getInt())!=null){
+                if ((option = ReadInput.getInt()) != null) {
                     break;
                 }
                 System.out.println("Invalid Entry , Enter Valid Number");
@@ -267,7 +260,7 @@ public class Main {
         System.out.println("How Many Address Books You Want to Add");
         Integer number = 0;
         while (true) {
-            if((number=ReadInput.getInt())!=null){
+            if ((number = ReadInput.getInt()) != null) {
                 break;
             }
             System.out.println("Invalid Entry , Enter Valid Number");
@@ -290,7 +283,7 @@ public class Main {
         System.out.println("Enter Number of Contacts You Want to add to Address Book");
         Integer number = 0;
         while (true) {
-            if((number=ReadInput.getInt())!=null){
+            if ((number = ReadInput.getInt()) != null) {
                 break;
             }
             System.out.println("Invalid Entry , Enter Valid Number");

@@ -6,7 +6,6 @@ import java.util.Optional;
 
 public class AddressBook {
     private List<Contact> contactList;
-    private Integer editIndex;
 
     public AddressBook() {
         contactList = new ArrayList<>();
@@ -17,7 +16,7 @@ public class AddressBook {
     }
 
     public boolean addContact(Contact contact) {
-        if(contact==null){
+        if (contact == null) {
             System.out.println("Unable to Add");
             return false;
         }
@@ -30,49 +29,12 @@ public class AddressBook {
 
     }
 
-    @Deprecated
-    public boolean checkIfContactExistsUsingName(String firstName, String lastName) {
-        for (Contact contact : contactList) {
-            if (contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Contact checkIfContactExistsUsingNameAndReturnContact(String firstName, String lastName) {
-        Optional<Contact> optional = contactList.stream()
-                                        .filter(x -> x.getFirstName().equals(firstName) && x.getLastName().equals(lastName))
-                                        .findFirst();
-        return optional.isPresent() ? optional.get() : null;
-    }
-
-    @Deprecated
-    public void editContactDetails(Contact contact) {
-        if (editIndex != null) {
-            contactList.set(editIndex, contact);
-            editIndex = null;
-        }
-    }
-
-    @Deprecated
-    public void deleteContactDetails() {
-        if (editIndex != null) {
-            contactList.remove(contactList.get(editIndex));
-            editIndex = null;
-        }
-    }
-
-    public void deleteContactDetails(Contact contact) {
-        contactList.remove(contact);
-    }
-
     private boolean isContactListed(Contact contact) {
         return contactList.stream().filter(x -> x.equals(contact)).count() != 0;
     }
 
     public boolean deleteContact(Contact contact) {
-       return contactList.remove(contact);
+        return contactList.remove(contact);
     }
 
     @Override
