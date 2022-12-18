@@ -10,6 +10,7 @@ public class AddressBookDirectory {
     private static Map<String, AddressBook> addressBookMap;
     private static Map<String, List<Contact>> cityPersonsMap;
     private static Map<String, List<Contact>> statePersonsMap;
+    private static List<String> optionsList = Arrays.asList("name", "city", "state", "zip");
 
     public AddressBookDirectory() {
         addressBookMap = new HashMap<>();
@@ -18,6 +19,9 @@ public class AddressBookDirectory {
     }
 
     public List<Contact> findByCity(String cityName) {
+        if (cityName == null) {
+            return null;
+        }
         return cityPersonsMap.get(cityName);
     }
 
@@ -33,28 +37,6 @@ public class AddressBookDirectory {
                 .stream()
                 .flatMap(addressBook -> addressBook.getContactList().stream())
                 .collect(Collectors.groupingBy(Contact::getState));
-    }
-
-    public void printStatePersonsMap() {
-        System.out.println("State to Persons List");
-        statePersonsMap.entrySet().forEach(k -> {
-            System.out.println(k.getKey() + ":");
-            k.getValue().forEach(y -> {
-                System.out.println(y.getFirstName() + " " + y.getLastName());
-            });
-            System.out.println();
-        });
-    }
-
-    public void printCityPersonsMap() {
-        System.out.println("City to Persons List");
-        cityPersonsMap.entrySet().forEach(k -> {
-            System.out.println(k.getKey() + ":");
-            k.getValue().forEach(y -> {
-                System.out.println(y.getFirstName() + " " + y.getLastName());
-            });
-            System.out.println();
-        });
     }
 
     public List<Contact> findByState(String stateName) {
@@ -74,11 +56,11 @@ public class AddressBookDirectory {
     }
 
     public AddressBook getAddressBookOfContact(Contact contact) {
-        return addressBookMap.values()
+        Optional<AddressBook> optionalAddressBook = addressBookMap.values()
                 .stream()
                 .filter(addressBook -> addressBook.getContactList().stream().filter(c -> c.equals(contact)).count() != 0)
-                .findFirst()
-                .get();
+                .findFirst();
+        return optionalAddressBook.isPresent() ? optionalAddressBook.get() : null;
     }
 
     public Contact checkIfNameExistsInTheDirectory(String firstName, String lastName) {
@@ -91,27 +73,45 @@ public class AddressBookDirectory {
     }
 
     public int getNoOfPersonsInACity(String cityName) {
-        return cityPersonsMap.get(cityName).size();
+        if (cityName == null) {
+            return 0;
+        }
+        List<Contact> contactList = cityPersonsMap.get(cityName);
+        return contactList == null ? 0 : contactList.size();
     }
 
     public int getNoOfPersonsInAState(String stateName) {
-        return statePersonsMap.get(stateName).size();
+        List<Contact> contactList = statePersonsMap.get(stateName);
+        return contactList == null ? 0 : contactList.size();
     }
 
-    public void sortAddressBook(String addressBookName, String option) {
+    public boolean deleteContactFromAddressBook(Contact contact) {
+        if (contact == null) {
+            return false;
+        }
+        AddressBook addressBook = getAddressBookOfContact(contact);
+        if (addressBook == null) {
+            return false;
+        }
+        return addressBook.deleteContact(contact);
+    }
+
+    public List<Contact> sortAddressBook(String addressBookName, String option) {
+        if (addressBookName == null || option == null || !optionsList.contains(option)) {
+            return null;
+        }
         AddressBook addressBook = addressBookMap.get(addressBookName);
         if (addressBook == null) {
-            System.out.println("Invalid Name");
-            return;
+            return null;
         }
-        List<Contact> collect = addressBook.getContactList()
+        List<Contact> contactList = addressBook.getContactList()
                 .stream()
                 .sorted(getComparator(option))
                 .collect(Collectors.toList());
-        collect.forEach(System.out::println);
+        return contactList;
     }
 
-    private  Comparator<Contact> getComparator(String option) {
+    private Comparator<Contact> getComparator(String option) {
         return (contact1, contact2) -> {
             if (option.equals("name")) {
                 return (contact1.getFirstName() + " " + contact1.getLastName().toLowerCase()).compareTo(contact2.getFirstName() + " " + contact2.getLastName());
@@ -122,7 +122,9 @@ public class AddressBookDirectory {
             if (option.equals("city")) {
                 return (contact1.getCity().toLowerCase()).compareTo(contact2.getCity().toLowerCase());
             }
-            return (contact1.getZip().toLowerCase()).compareTo(contact2.getZip().toLowerCase());
+            Integer i1 = Integer.parseInt(contact1.getZip());
+            Integer i2 = Integer.parseInt(contact2.getZip());
+            return i1.compareTo(i2);
         };
     }
 

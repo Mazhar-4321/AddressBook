@@ -79,12 +79,9 @@ public class Contact {
 
     @Override
     public boolean equals(Object o) {
-       /// System.out.println("hi");
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
-        //System.out.println(firstName+","+ contact.firstName+","+lastName+","+ contact.lastName);
-        //System.out.println(Objects.equals(firstName, contact.firstName) && Objects.equals(lastName, contact.lastName));
         return Objects.equals(firstName, contact.firstName) && Objects.equals(lastName, contact.lastName);
     }
 

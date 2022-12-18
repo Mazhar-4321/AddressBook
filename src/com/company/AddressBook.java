@@ -2,7 +2,6 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class AddressBook {
     private List<Contact> contactList;
@@ -20,8 +19,7 @@ public class AddressBook {
             System.out.println("Unable to Add");
             return false;
         }
-        if (isContactListed(contact)) {
-            System.out.println("Contact Already Exists");
+        if (!isContactListed(contact)) {
             return false;
         }
         contactList.add(contact);
@@ -30,7 +28,8 @@ public class AddressBook {
     }
 
     private boolean isContactListed(Contact contact) {
-        return contactList.stream().filter(x -> x.equals(contact)).count() != 0;
+        long count = contactList.stream().filter(x -> x.equals(contact)).count();
+        return count == 0;
     }
 
     public boolean deleteContact(Contact contact) {
