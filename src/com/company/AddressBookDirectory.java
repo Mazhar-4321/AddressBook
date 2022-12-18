@@ -110,6 +110,42 @@ public class AddressBookDirectory {
                 .collect(Collectors.toList());
         collect.forEach(System.out::println);
     }
+    public void sortAddressBookByCity(String addressBookName){
+        AddressBook addressBook = addressBookMap.get(addressBookName);
+        if (addressBook == null) {
+            System.out.println("Invalid Name");
+            return;
+        }
+        List<Contact> collect = addressBook.getContactList()
+                .stream()
+                .sorted(Comparator.comparing(contact -> (contact.getCity().toLowerCase())))
+                .collect(Collectors.toList());
+        collect.forEach(System.out::println);
+    }
+    public void sortAddressBookByState(String addressBookName){
+        AddressBook addressBook = addressBookMap.get(addressBookName);
+        if (addressBook == null) {
+            System.out.println("Invalid Name");
+            return;
+        }
+        List<Contact> collect = addressBook.getContactList()
+                .stream()
+                .sorted(Comparator.comparing(contact -> (contact.getState().toLowerCase())))
+                .collect(Collectors.toList());
+        collect.forEach(System.out::println);
+    }
+    public void sortAddressBookByZip(String addressBookName){
+        AddressBook addressBook = addressBookMap.get(addressBookName);
+        if (addressBook == null) {
+            System.out.println("Invalid Name");
+            return;
+        }
+        List<Contact> collect = addressBook.getContactList()
+                .stream()
+                .sorted(Comparator.comparing(contact -> (contact.getZip().toLowerCase())))
+                .collect(Collectors.toList());
+        collect.forEach(System.out::println);
+    }
 
     @Override
     public String toString() {
