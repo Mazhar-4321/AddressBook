@@ -79,10 +79,13 @@ public class Contact {
 
     @Override
     public boolean equals(Object o) {
+       /// System.out.println("hi");
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
-        return Objects.equals(firstName, contact.firstName) && Objects.equals(lastName, contact.lastName) && Objects.equals(city, contact.city) && Objects.equals(state, contact.state) && Objects.equals(zip, contact.zip) && Objects.equals(phoneNumber, contact.phoneNumber) && Objects.equals(email, contact.email);
+        //System.out.println(firstName+","+ contact.firstName+","+lastName+","+ contact.lastName);
+        //System.out.println(Objects.equals(firstName, contact.firstName) && Objects.equals(lastName, contact.lastName));
+        return Objects.equals(firstName, contact.firstName) && Objects.equals(lastName, contact.lastName);
     }
 
     @Override

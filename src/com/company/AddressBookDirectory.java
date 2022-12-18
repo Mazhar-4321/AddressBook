@@ -1,6 +1,8 @@
 package com.company;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,33 +18,21 @@ public class AddressBookDirectory {
     }
 
     public List<Contact> findByCity(String cityName) {
-        List<Contact> contactList = new ArrayList<>();
-        addressBookMap.entrySet().forEach(key -> {
-            List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getCity().equals(cityName)).collect(Collectors.toList());
-            if (list != null) {
-                contactList.addAll(list);
-            }
-        });
-        return contactList;
+        return cityPersonsMap.get(cityName);
     }
 
     public void addCityWiseContacts() {
-        Set<String> cities = new HashSet<>();
-        addressBookMap.entrySet().forEach(k -> {
-            k.getValue().getContactList().forEach(y -> cities.add(y.getCity()));
-        });
-        cities.stream().forEach(k -> cityPersonsMap.put(k, findByCity(k)));
+        cityPersonsMap = addressBookMap.values()
+                .stream()
+                .flatMap(addressBook -> addressBook.getContactList().stream())
+                .collect(Collectors.groupingBy(Contact::getCity));
     }
 
     public void addStateWiseContacts() {
-        Set<String> states = new HashSet<>();
-        addressBookMap.entrySet().forEach(k -> {
-            k.getValue().getContactList().forEach(y -> {
-                states.add(y.getState());
-                System.out.println(y.getState() + "   ");
-            });
-        });
-        states.stream().forEach(k -> statePersonsMap.put(k, findByState(k)));
+        statePersonsMap = addressBookMap.values()
+                .stream()
+                .flatMap(addressBook -> addressBook.getContactList().stream())
+                .collect(Collectors.groupingBy(Contact::getState));
     }
 
     public void printStatePersonsMap() {
@@ -68,14 +58,7 @@ public class AddressBookDirectory {
     }
 
     public List<Contact> findByState(String stateName) {
-        List<Contact> contactList = new ArrayList<>();
-        addressBookMap.entrySet().forEach(key -> {
-            List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getState().equals(stateName)).collect(Collectors.toList());
-            if (list != null) {
-                contactList.addAll(list);
-            }
-        });
-        return contactList;
+        return statePersonsMap.get(stateName);
     }
 
     public Map<String, AddressBook> getAddressBookMap() {
@@ -91,35 +74,28 @@ public class AddressBookDirectory {
     }
 
     public AddressBook getAddressBookOfContact(Contact contact) {
-        List<AddressBook> addressBookList = new ArrayList<>();
-        addressBookMap.entrySet().forEach(key -> {
-            List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getFirstName().equals(contact.getFirstName()) && y.getLastName().equals(contact.getLastName())).collect(Collectors.toList());
-            if (list != null && addressBookList.size() == 0) {
-                addressBookList.add(key.getValue());
-            }
-        });
-
-        return addressBookList.get(0);
+        return addressBookMap.values()
+                .stream()
+                .filter(addressBook -> addressBook.getContactList().stream().filter(c -> c.equals(contact)).count() != 0)
+                .findFirst()
+                .get();
     }
 
     public Contact checkIfNameExistsInTheDirectory(String firstName, String lastName) {
-        List<Contact> contactList = new ArrayList<>();
-        addressBookMap.entrySet().forEach(key -> {
-            List<Contact> list = key.getValue().getContactList().stream().filter(y -> y.getFirstName().equals(firstName) && y.getLastName().equals(lastName)).collect(Collectors.toList());
-            if (list != null) {
-                contactList.addAll(list);
-                return;
-            }
-        });
-        return contactList.size() == 0 ? null : contactList.get(0);
+        Optional<Contact> optionalContact = addressBookMap.values()
+                .stream()
+                .flatMap(addressBook -> addressBook.getContactList().stream())
+                .filter(contact -> contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName))
+                .findFirst();
+        return optionalContact.isPresent() ? optionalContact.get() : null;
     }
 
-    public Long getNoOfPersonsInACity(String cityName) {
-        return cityPersonsMap.entrySet().stream().filter(k -> k.getKey().equals(cityName)).count();
+    public int getNoOfPersonsInACity(String cityName) {
+        return cityPersonsMap.get(cityName).size();
     }
 
-    public Long getNoOfPersonsInAState(String stateName) {
-        return statePersonsMap.entrySet().stream().filter(k -> k.getKey().equals(stateName)).count();
+    public int getNoOfPersonsInAState(String stateName) {
+        return statePersonsMap.get(stateName).size();
     }
 
     @Override

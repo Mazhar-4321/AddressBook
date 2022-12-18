@@ -41,7 +41,9 @@ public class AddressBook {
     }
 
     public Contact checkIfContactExistsUsingNameAndReturnContact(String firstName, String lastName) {
-        Optional<Contact> optional = contactList.stream().filter(x -> x.getFirstName().equals(firstName) && x.getLastName().equals(lastName)).findFirst();
+        Optional<Contact> optional = contactList.stream()
+                                        .filter(x -> x.getFirstName().equals(firstName) && x.getLastName().equals(lastName))
+                                        .findFirst();
         return optional.isPresent() ? optional.get() : null;
     }
 
