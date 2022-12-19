@@ -1,5 +1,7 @@
 package com.company;
 
+import test.CustomException;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -40,6 +42,9 @@ public class AddressBookDirectory {
     }
 
     public List<Contact> findByState(String stateName) {
+        if (stateName == null) {
+            return null;
+        }
         return statePersonsMap.get(stateName);
     }
 
@@ -56,20 +61,18 @@ public class AddressBookDirectory {
     }
 
     public AddressBook getAddressBookOfContact(Contact contact) {
-        Optional<AddressBook> optionalAddressBook = addressBookMap.values()
+        return addressBookMap.values()
                 .stream()
                 .filter(addressBook -> addressBook.getContactList().stream().filter(c -> c.equals(contact)).count() != 0)
-                .findFirst();
-        return optionalAddressBook.isPresent() ? optionalAddressBook.get() : null;
+                .findFirst().orElseThrow(() -> new CustomException("No AddressBook  Available"));
     }
 
     public Contact checkIfNameExistsInTheDirectory(String firstName, String lastName) {
-        Optional<Contact> optionalContact = addressBookMap.values()
+        return addressBookMap.values()
                 .stream()
                 .flatMap(addressBook -> addressBook.getContactList().stream())
                 .filter(contact -> contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName))
-                .findFirst();
-        return optionalContact.isPresent() ? optionalContact.get() : null;
+                .findFirst().orElseThrow(() -> new CustomException("Invalid Entry"));
     }
 
     public int getNoOfPersonsInACity(String cityName) {

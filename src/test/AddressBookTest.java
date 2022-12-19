@@ -206,7 +206,14 @@ public class AddressBookTest {
 
     @Test
     public void when_UnAvailableContactEdited_MustReturnFalse() {
-        Assert.assertEquals(false, addressBookDirectory.checkIfNameExistsInTheDirectory("firstName", "lastName") != null);
+        boolean observedResult=false;
+        try{
+            addressBookDirectory.checkIfNameExistsInTheDirectory("firstName", "lastName");
+        }
+        catch(CustomException c){
+            observedResult=c.getMessage().equals("Invalid Entry")?false:true;
+        }
+        Assert.assertEquals(false, observedResult);
         Assert.assertEquals(true, addressBookDirectory.checkIfNameExistsInTheDirectory("Mazhar", "Ali") != null);
     }
 
