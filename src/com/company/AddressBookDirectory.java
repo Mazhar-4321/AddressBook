@@ -64,7 +64,8 @@ public class AddressBookDirectory {
         return addressBookMap.values()
                 .stream()
                 .filter(addressBook -> addressBook.getContactList().stream().filter(c -> c.equals(contact)).count() != 0)
-                .findFirst().orElseThrow(() -> new CustomException("No AddressBook  Available"));
+                .findFirst()
+                .orElseThrow(() -> new CustomException("No AddressBook  Available"));
     }
 
     public Contact checkIfNameExistsInTheDirectory(String firstName, String lastName) {
@@ -72,7 +73,8 @@ public class AddressBookDirectory {
                 .stream()
                 .flatMap(addressBook -> addressBook.getContactList().stream())
                 .filter(contact -> contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName))
-                .findFirst().orElseThrow(() -> new CustomException("Invalid Entry"));
+                .findFirst()
+                .orElseThrow(() -> new CustomException("Invalid Entry"));
     }
 
     public int getNoOfPersonsInACity(String cityName) {
