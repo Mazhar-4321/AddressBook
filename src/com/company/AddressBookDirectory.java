@@ -3,10 +3,7 @@ package com.company;
 import test.CustomException;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class AddressBookDirectory {
     private static Map<String, AddressBook> addressBookMap;
@@ -27,18 +24,19 @@ public class AddressBookDirectory {
         return cityPersonsMap.get(cityName);
     }
 
-    public void addCityWiseContacts() {
-        cityPersonsMap = addressBookMap.values()
+    private Map<String, List<Contact>> addStateOrCityWiseContacta(String option) {
+        return addressBookMap.values()
                 .stream()
                 .flatMap(addressBook -> addressBook.getContactList().stream())
-                .collect(Collectors.groupingBy(Contact::getCity));
+                .collect(Collectors.groupingBy(contact -> option.equals("city") ? contact.getCity() : contact.getState()));
+    }
+
+    public void addCityWiseContacts() {
+        cityPersonsMap = addStateOrCityWiseContacta("city");
     }
 
     public void addStateWiseContacts() {
-        statePersonsMap = addressBookMap.values()
-                .stream()
-                .flatMap(addressBook -> addressBook.getContactList().stream())
-                .collect(Collectors.groupingBy(Contact::getState));
+        statePersonsMap = addStateOrCityWiseContacta("state");
     }
 
     public List<Contact> findByState(String stateName) {
