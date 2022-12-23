@@ -1,5 +1,7 @@
 package com.company;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import test.CustomException;
@@ -177,6 +179,18 @@ public class AddressBookDirectory {
                 .build();
         List<PersonCSV> list = csvReader.parse();
         return list;
+    }
+
+    public Map<String, List<Contact>> readContactFromJSONFile(String fileName) {
+        Map<String, List<Contact>> map = null;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("D:\\Maven WorkSpace\\AddressBook\\src\\test\\resources\\addressBookData.json"));
+            map = new Gson().fromJson(br, new TypeToken<HashMap<String, List<Contact>>>() {
+            }.getType());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 
     @Override

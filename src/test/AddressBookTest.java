@@ -39,7 +39,7 @@ public class AddressBookTest {
         AddressBookDirectory addressBookDirectory = new AddressBookDirectory();
         String filePath = "D:\\Maven WorkSpace\\AddressBook\\src\\test\\resources\\addressBookData.csv";
         List<PersonCSV> observedList = addressBookDirectory.readContactFromCSVFile(filePath);
-        Assert.assertArrayEquals(expectedList.toArray(),observedList.toArray());
+        Assert.assertArrayEquals(expectedList.toArray(), observedList.toArray());
     }
 
     @Test
