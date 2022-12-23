@@ -1,10 +1,11 @@
 package com.company;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 import test.CustomException;
+import test.resources.PersonCSV;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -159,6 +160,23 @@ public class AddressBookDirectory {
             }
         }
         return true;
+    }
+
+    public List<PersonCSV> readContactFromCSVFile(String fileName) {
+        Reader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("D:\\Maven WorkSpace\\AddressBook\\src\\test\\resources\\addressBookData.csv"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        CsvToBean<PersonCSV> csvReader = new
+                CsvToBeanBuilder(reader)
+                .withType(PersonCSV.class)
+                .withSeparator(',')
+                .withIgnoreLeadingWhiteSpace(true)
+                .build();
+        List<PersonCSV> list = csvReader.parse();
+        return list;
     }
 
     @Override

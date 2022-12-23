@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import org.junit.Assert;
 import org.junit.Test;
 import test.resources.JSONTestData;
+import test.resources.PersonCSV;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -27,6 +28,18 @@ public class AddressBookTest {
         boolean observedResult = addressBookDirectory.writeContactIntoFile(filePath, contact);
         boolean expectedResult = true;
         Assert.assertEquals(expectedResult, observedResult);
+    }
+
+    @Test
+    public void whenGivenCSVFile_MustReturnContactsList() {
+        List<PersonCSV> expectedList = Arrays.asList(
+                new PersonCSV("1", "2", "3", "4", "5", "6", "7", "8"),
+                new PersonCSV("1", "2", "3", "4", "5", "6", "7", "8"),
+                new PersonCSV("1", "2", "3", "4", "5", "6", "7", "8"));
+        AddressBookDirectory addressBookDirectory = new AddressBookDirectory();
+        String filePath = "D:\\Maven WorkSpace\\AddressBook\\src\\test\\resources\\addressBookData.csv";
+        List<PersonCSV> observedList = addressBookDirectory.readContactFromCSVFile(filePath);
+        Assert.assertArrayEquals(expectedList.toArray(),observedList.toArray());
     }
 
     @Test
