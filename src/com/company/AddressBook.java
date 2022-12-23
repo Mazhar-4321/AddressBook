@@ -14,6 +14,11 @@ public class AddressBook {
         return contactList;
     }
 
+    public AddressBook setContactList(List<Contact> contactList) {
+        this.contactList = contactList;
+        return this;
+    }
+
     public boolean addContact(Contact contact) {
         if (contact == null) {
             System.out.println("Unable to Add");

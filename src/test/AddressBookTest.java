@@ -2,18 +2,31 @@ package test;
 
 import com.company.AddressBookDirectory;
 import com.company.Contact;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.junit.Assert;
 import org.junit.Test;
 import test.resources.JSONTestData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
 
 public class AddressBookTest {
     private static AddressBookDirectory addressBookDirectory = JSONTestData.getAddressBookDirectory();
 
     public AddressBookTest() {
+    }
+
+    @Test
+    public void when_GivenContactToAddIntoFile_ShouldReflectChangeAndReturnTrue() {
+        Contact contact = new Contact("Mazhar", "Ali", "Hyderabad", "Telangana", "500008", "8125629427", "syedmazharali742@gmail.com");
+        AddressBookDirectory addressBookDirectory = new AddressBookDirectory();
+        String filePath = "D:\\Maven WorkSpace\\AddressBook\\src\\test\\resources\\contacts.txt";
+        boolean observedResult = addressBookDirectory.writeContactIntoFile(filePath, contact);
+        boolean expectedResult = true;
+        Assert.assertEquals(expectedResult, observedResult);
     }
 
     @Test
@@ -206,16 +219,13 @@ public class AddressBookTest {
 
     @Test
     public void when_UnAvailableContactEdited_MustReturnFalse() {
-        boolean observedResult=false;
-        try{
+        boolean observedResult = false;
+        try {
             addressBookDirectory.checkIfNameExistsInTheDirectory("firstName", "lastName");
-        }
-        catch(CustomException c){
-            observedResult=c.getMessage().equals("Invalid Entry")?false:true;
+        } catch (CustomException c) {
+            observedResult = c.getMessage().equals("No Contact Exists With The Given First Name And Last Name") ? false : true;
         }
         Assert.assertEquals(false, observedResult);
         Assert.assertEquals(true, addressBookDirectory.checkIfNameExistsInTheDirectory("Mazhar", "Ali") != null);
     }
-
-
 }

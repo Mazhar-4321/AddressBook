@@ -2,14 +2,17 @@ package com.company;
 
 import test.CustomException;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class AddressBookDirectory {
-    private static Map<String, AddressBook> addressBookMap;
-    private static Map<String, List<Contact>> cityPersonsMap;
-    private static Map<String, List<Contact>> statePersonsMap;
     private static List<String> optionsList = Arrays.asList("name", "city", "state", "zip");
+    private Map<String, AddressBook> addressBookMap;
+    private Map<String, List<Contact>> cityPersonsMap;
+    private Map<String, List<Contact>> statePersonsMap;
 
     public AddressBookDirectory() {
         addressBookMap = new HashMap<>();
@@ -63,7 +66,7 @@ public class AddressBookDirectory {
                 .stream()
                 .filter(addressBook -> addressBook.getContactList().stream().filter(c -> c.equals(contact)).count() != 0)
                 .findFirst()
-                .orElseThrow(() -> new CustomException("No AddressBook  Available"));
+                .orElseThrow(() -> new CustomException("No AddressBook Associated With This Contact"));
     }
 
     public Contact checkIfNameExistsInTheDirectory(String firstName, String lastName) {
@@ -72,7 +75,7 @@ public class AddressBookDirectory {
                 .flatMap(addressBook -> addressBook.getContactList().stream())
                 .filter(contact -> contact.getFirstName().equals(firstName) && contact.getLastName().equals(lastName))
                 .findFirst()
-                .orElseThrow(() -> new CustomException("Invalid Entry"));
+                .orElseThrow(() -> new CustomException("No Contact Exists With The Given First Name And Last Name"));
     }
 
     public int getNoOfPersonsInACity(String cityName) {
@@ -84,6 +87,9 @@ public class AddressBookDirectory {
     }
 
     public int getNoOfPersonsInAState(String stateName) {
+        if (stateName == null) {
+            return 0;
+        }
         List<Contact> contactList = statePersonsMap.get(stateName);
         return contactList == null ? 0 : contactList.size();
     }
@@ -129,6 +135,30 @@ public class AddressBookDirectory {
             Integer i2 = Integer.parseInt(contact2.getZip());
             return i1.compareTo(i2);
         };
+    }
+
+    public boolean writeContactIntoFile(String fileName, Contact contact) {
+        File file = new File(fileName);
+        FileWriter fr = null;
+        String text = contact.getFirstName() + "," + contact.getLastName() + "," + contact.getCity() +
+                "," + contact.getState() + "," + contact.getZip() + "," + contact.getPhoneNumber() + ","
+                + contact.getEmail();
+        try {
+            fr = new FileWriter(file, true);
+            fr.write(text);
+            fr.write("\r\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
